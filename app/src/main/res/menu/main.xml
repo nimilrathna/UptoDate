@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:orderInCategory="103"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_sortby"
+        android:icon="@drawable/ic_sort_black_24dp"
+        android:orderInCategory="102"
+        android:title="Sort By">
+        <menu>
+            <item
+                android:id="@+id/action_sort_orderdate"
+                android:title="Order Date" />
+            <item
+                android:id="@+id/action_sort_purchasedate"
+                android:title="Purchase Date" />
+            <item
+                android:id="@+id/action_sort_entrydate"
+                android:title="Entry Date" />
+            <item
+                android:id="@+id/action_sort_customername"
+                android:title="Customer Name" />
+            <item
+                android:id="@+id/action_sort_productname"
+                android:title="Product Name" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_view_orders"
+        android:orderInCategory="103"
+        android:title="View Orders">
+        <menu>
+            <item
+                android:id="@+id/action_delivered"
+                android:checkable="true"
+                android:title="Delivered" />
+            <item
+                android:id="@+id/action_payed"
+                android:checkable="true"
+                android:title="Payed" />
+            <item
+                android:id="@+id/action_all"
+                android:title="All" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_delete_all"
+        android:icon="@drawable/ic_delete_forever_white_24dp"
+        android:orderInCategory="103"
+        android:title="Delete All"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:orderInCategory="104"
+        android:title="Settings"
+        app:showAsAction="ifRoom" />
+</menu>
