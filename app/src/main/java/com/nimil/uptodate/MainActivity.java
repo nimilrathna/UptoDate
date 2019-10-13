@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.text.Html;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -532,16 +533,58 @@ public class MainActivity extends AppCompatActivity
             mMenuItemSortProductName.setVisible(false);
             mMenuItemViewOrders.setVisible(false);
             displayCustomers();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }
+         else if (id == R.id.nav_send) {
+            sendGroupEmail();
+        }
+         else if(id==R.id.nav_settings){
+            Intent intent=new Intent(this,UptodateSettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    private void sendGroupEmail() {
+        try {
+            String msg ="";
+            String email=getAllCustomerEmailId();
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            String organisation_name = pref.getString("signature", "");
+            String subject = organisation_name + " - Order Details";
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setType("message/plain");
+            String mailto = "mailto:"+email +
+                    "?subject=" + Uri.encode(subject) +
+                    "&body=" + Uri.encode(msg);
+
+            intent.setData(Uri.parse(mailto));
+            startActivity(intent);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            //Do Nothing
+        }
+
+    }
+
+    private String getAllCustomerEmailId() {
+        Cursor cursor=mCustomerRecyclerAdapter.getCursor();
+        if(cursor==null)
+            return "";
+        cursor.moveToFirst();
+        StringBuffer emailIds=new StringBuffer(cursor.getString(cursor.getColumnIndex(Customers.COLUMN_EMAIL_ID)));
+        cursor.moveToFirst();
+        while(cursor.moveToNext()){
+            String email=cursor.getString(cursor.getColumnIndex(Customers.COLUMN_EMAIL_ID));
+            if(email!=null && !email.equals("")){
+                emailIds.append(";"+email);
+            }
+        }
+        return emailIds.toString();
+    }
+
     private void displayOrders() {
         mRecyclerItems.setAdapter(mOrderRecyclerAdapter);
         selectNavigationMenuItem(R.id.nav_orders);

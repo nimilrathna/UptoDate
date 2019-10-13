@@ -101,6 +101,8 @@ public class OrderActivity extends AppCompatActivity
     private ArrayAdapter<CharSequence> mStatusArrayAdapter;
     private int mOrderStatusPos;
     private String mCurrency;
+    private String mPreviousProductId;
+    private int mPreviousProductTotalQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +250,11 @@ public class OrderActivity extends AppCompatActivity
                     messageBox.show(getSupportFragmentManager(), "Input Validation");
                     return;
                 }
-
+                else if(currentQuantity<0){
+                    messageBox = new CustomMessageBox("Quantity is in negative.");
+                    messageBox.show(getSupportFragmentManager(), "Input Validation");
+                    return;
+                }
                 if (mIsNewOrder) {
                     //insert
                     if (currentQuantity > mProductTotalQuantity) {
@@ -258,19 +264,35 @@ public class OrderActivity extends AppCompatActivity
                     }
                     createNewOrder();
                     int quantity = mProductTotalQuantity - currentQuantity;
-                    updateProductQuantity(quantity);
+                    updateProductQuantity(mProductId,quantity);
 
                     sendSMStoCustomer();
                 } else {
-                    int quantityToReduce = currentQuantity - mPreviousQuantity;
-                    if (quantityToReduce > 0 && quantityToReduce > mProductTotalQuantity) {
-                        messageBox = new CustomMessageBox("Insufficient Product Quantity");
-                        messageBox.show(getSupportFragmentManager(), "Input Validation");
-                        return;
+                    if(mPreviousProductId!=null && mPreviousProductId.equals(mProductId)) {
+                        int quantityToReduce = currentQuantity - mPreviousQuantity;
+                        if (quantityToReduce > 0 && quantityToReduce > mProductTotalQuantity) {
+                            messageBox = new CustomMessageBox("Insufficient Product Quantity");
+                            messageBox.show(getSupportFragmentManager(), "Input Validation");
+                            return;
+                        }
+                        int quantity = mProductTotalQuantity - (quantityToReduce);
+                        updateProductQuantity(mProductId,quantity);
+                    }
+                    else {
+                        if(currentQuantity>mProductTotalQuantity){
+                            messageBox = new CustomMessageBox("Insufficient Product Quantity");
+                            messageBox.show(getSupportFragmentManager(), "Input Validation");
+                            return;
+                        }
+                        if(mPreviousProductId!=null && !mPreviousProductId.equals("")) {
+                            int quantity = mPreviousProductTotalQuantity + mPreviousQuantity;
+                            updateProductQuantity(mPreviousProductId, quantity);
+                        }
+                        int quantity1 = mProductTotalQuantity - currentQuantity;
+                        updateProductQuantity(mProductId,quantity1);
                     }
                     updateOrderDetails();
-                    int quantity = mProductTotalQuantity - (quantityToReduce);
-                    updateProductQuantity(quantity);
+
                 }
 
             }
@@ -333,7 +355,7 @@ public class OrderActivity extends AppCompatActivity
         return null;
     }
 
-    private void updateProductQuantity(int quantity) {
+    private void updateProductQuantity(String productId, int quantity) {
         AsyncTask<String,Void,Void> task=new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... strings) {
@@ -349,7 +371,7 @@ public class OrderActivity extends AppCompatActivity
         };
         ContentValues cv=new ContentValues();
         cv.put(Products.COLUMN_QUANTITY,quantity);
-        task.execute(Integer.toString(quantity),mProductId);
+        task.execute(Integer.toString(quantity),productId);
     }
 
     private boolean validateUserInput() {
@@ -628,9 +650,12 @@ public class OrderActivity extends AppCompatActivity
         mAutoTextProductName.setText(mOrderCursor.getString(mProductNamePos));
         mSelectedProductName=mOrderCursor.getString(mProductNamePos);
         mProductId=mOrderCursor.getString(mProductIdPos);
+        mPreviousProductId = mOrderCursor.getString(mProductIdPos);
         mPreviousQuantity=Integer.parseInt(mOrderCursor.getString(mProductQuantityPos));
-        if(mProductId!=null)
-            mProductTotalQuantity =Integer.parseInt(mOrderCursor.getString(mProductTotalQuantityPos));
+        if(mProductId!=null) {
+            mProductTotalQuantity = Integer.parseInt(mOrderCursor.getString(mProductTotalQuantityPos));
+            mPreviousProductTotalQuantity = Integer.parseInt(mOrderCursor.getString(mProductTotalQuantityPos));
+        }
         else
             mProductTotalQuantity=0;
         String orderDate=mOrderCursor.getString(mOrderDatePos);

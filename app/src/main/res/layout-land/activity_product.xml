@@ -27,79 +27,72 @@
         android:id="@+id/text_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Purchase Date"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/text_product_title"
+        app:layout_constraintStart_toStartOf="@+id/dp_purchased_date"
         app:layout_constraintTop_toBottomOf="@+id/text_product_title" />
 
     <DatePicker
         android:id="@+id/dp_purchased_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+
         android:layout_marginEnd="8dp"
         android:calendarViewShown="false"
-
         android:datePickerMode="spinner"
         android:paddingBottom="6dp"
         android:spinnersShown="true"
         app:layout_constraintEnd_toEndOf="@+id/text_product_title"
-        app:layout_constraintTop_toBottomOf="@+id/text_product_title" />
+        app:layout_constraintStart_toEndOf="@+id/text_actual_price"
+        app:layout_constraintTop_toBottomOf="@+id/text_date_label" />
 
     <EditText
         android:id="@+id/text_actual_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Actual Price"
         android:inputType="number"
         android:tag="Actual Price"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/text_selling_price"
-        app:layout_constraintTop_toBottomOf="@+id/dp_purchased_date" />
+        app:layout_constraintEnd_toStartOf="@+id/dp_purchased_date"
+        app:layout_constraintStart_toStartOf="@+id/text_actualprice_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_actualprice_label" />
 
     <TextView
         android:id="@+id/text_actualprice_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Actual Price "
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dp_purchased_date" />
+        app:layout_constraintTop_toBottomOf="@+id/text_product_title" />
 
     <EditText
         android:id="@+id/text_selling_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Selling Price"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/text_actual_price"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/text_sellingprice_label"
-        app:layout_constraintTop_toBottomOf="@+id/text_actual_price" />
+        app:layout_constraintStart_toStartOf="@+id/text_sellingprice_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_sellingprice_label" />
 
     <Button
         android:id="@+id/button_add_update"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
         android:text="Add Product"
@@ -112,22 +105,20 @@
         android:id="@+id/text_quantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Quantity"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/text_selling_price"
-        app:layout_constraintTop_toBottomOf="@+id/text_selling_price" />
+        app:layout_constraintEnd_toEndOf="@+id/text_selling_price"
+        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/text_sellingprice_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Selling Price *"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
@@ -139,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Quantity *"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"

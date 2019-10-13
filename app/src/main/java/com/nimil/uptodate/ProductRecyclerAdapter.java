@@ -87,7 +87,11 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.mId=mCursor.getInt(mProductIdPos);
-        holder.mText_product_title.setText(mCursor.getString(mProductTitlePos));
+        String productTitle=mCursor.getString(mProductTitlePos);
+        int productTitleLength=mContext.getResources().getInteger(R.integer.product_name_length);
+        if(productTitle.length()>productTitleLength)
+            productTitle=productTitle.substring(0,productTitleLength)+"..";
+        holder.mText_product_title.setText(productTitle);
         holder.mText_purchase_date.setText(mCursor.getString(mPurchaseDatePos));
         holder.mText_quantity.setText(mCursor.getString(mQuantityPos));
         holder.mText_selling_price.setText(mCurrency+mCursor.getString(mSellingPricePos));

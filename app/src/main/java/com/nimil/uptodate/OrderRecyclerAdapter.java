@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -101,8 +103,6 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         if(customerName.length()> titleLength)
             customerName=customerName.substring(0,titleLength)+"..";
         holder.mText_CustomerName.setText(customerName);
-        holder.mText_ContactNo.setText(mCursor.getString(mCustomerContactNoPos));
-        holder.mText_ContactNo.setVisibility(View.GONE);
         String productTitle=mCursor.getString(mProductTitlePos);
         int productTitleLength=mContext.getResources().getInteger(R.integer.product_name_length);
         if(productTitle.length()>productTitleLength)
@@ -181,11 +181,12 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public final TextView mText_CustomerName;
-        public final TextView mText_ContactNo;
+        //public final TextView mText_ContactNo;
         public final TextView mText_ProductTitle;
         public final TextView mText_OrderDate;
         public final TextView mText_Quantity;
         public final TextView mText_cash_payable;
+        public final ImageButton mButtonEdit;
         //public final TextView mText_CashPayed;
         //public final CheckBox mCheck_Delivered;
         //public final CheckBox mCheck_Payment_done;
@@ -197,8 +198,9 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mButtonEdit=itemView.findViewById(R.id.imagebutton_edit);
             mText_CustomerName=itemView.findViewById(R.id.text_customer_name);
-            mText_ContactNo=itemView.findViewById(R.id.text_contact_no);
+            //mText_ContactNo=itemView.findViewById(R.id.text_contact_no);
             mText_ProductTitle=itemView.findViewById(R.id.text_product_name);
             mText_OrderDate=itemView.findViewById(R.id.text_order_date);
             mText_Quantity=itemView.findViewById(R.id.text_quantity);
@@ -211,6 +213,14 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             mCheck_Selection=itemView.findViewById(R.id.check_selection);
             mCheck_Selection.setChecked(false);
             isAddedToSelectionList=false;
+            mButtonEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, OrderActivity.class);
+                    intent.putExtra(OrderActivity.ORDER_ID, mId);
+                    mContext.startActivity(intent);
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

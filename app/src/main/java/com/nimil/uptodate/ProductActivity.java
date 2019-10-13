@@ -101,8 +101,15 @@ private int mProduct_id;
             public void onClick(View view) {
                 if(mIsNewProduct){
                     //insert
-                    if(validateUserInput())
+                    if(validateUserInput()) {
+                        int currentQuantity=Integer.parseInt(mTextQuantity.getText().toString());
+                        if(currentQuantity<0){
+                            CustomMessageBox messageBox = new CustomMessageBox("Quantity is in negative.");
+                            messageBox.show(getSupportFragmentManager(), "Input Validation");
+                            return;
+                        }
                         createNewProduct();
+                    }
                     else{
                         CustomMessageBox messageBox=new CustomMessageBox("Please Fill all the Mandatory(*) Fields");
                         messageBox.show(getSupportFragmentManager(),"Input Validation");
@@ -111,6 +118,12 @@ private int mProduct_id;
                 else{
                     //Update
                     if(validateUserInput()) {
+                        int currentQuantity=Integer.parseInt(mTextQuantity.getText().toString());
+                         if(currentQuantity<0){
+                             CustomMessageBox messageBox = new CustomMessageBox("Quantity is in negative.");
+                            messageBox.show(getSupportFragmentManager(), "Input Validation");
+                            return;
+                        }
                         updateProduct();
                         String currentProductName=mTextProductTitle.getText().toString();
                         if(!mPreviousProductName.equals(currentProductName)){

@@ -12,32 +12,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
         android:paddingBottom="0dp"
         android:spinnersShown="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_order_date_label"
-        app:layout_constraintTop_toBottomOf="@+id/text_quantity" />
+        app:layout_constraintStart_toStartOf="@+id/text_profit"
+        app:layout_constraintTop_toBottomOf="@+id/text_profit" />
 
     <TextView
         android:id="@+id/text_order_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Order Date"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_quantity" />
+        app:layout_constraintStart_toStartOf="@+id/text_cash_payed_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_profit" />
 
     <Button
         android:id="@+id/button_add_update_order"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorAccent"
@@ -45,8 +47,8 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/dp_order_date"
+        app:layout_constraintEnd_toStartOf="@+id/dp_order_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_order_status" />
 
@@ -54,22 +56,22 @@
         android:id="@+id/text_quantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Quantity"
         android:inputType="number"
         android:tag="Quantity"
         android:textAlignment="center"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/dp_order_date"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/autotext_product_name" />
 
     <EditText
         android:id="@+id/text_profit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
@@ -78,8 +80,8 @@
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/dp_order_date"
-        app:layout_constraintTop_toBottomOf="@+id/dp_order_date" />
+        app:layout_constraintStart_toEndOf="@+id/text_cash_payed_label"
+        app:layout_constraintTop_toBottomOf="@+id/autotext_product_name" />
 
     <TextView
         android:id="@+id/textView13"
@@ -87,11 +89,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Quantity *"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/text_order_date_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autotext_product_name" />
 
@@ -101,13 +101,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="8dp"
         android:text="Cash Payed"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dp_order_date" />
+        app:layout_constraintEnd_toStartOf="@+id/text_profit"
+        app:layout_constraintStart_toEndOf="@+id/text_quantity"
+        app:layout_constraintTop_toBottomOf="@+id/autotext_product_name" />
 
     <AutoCompleteTextView
         android:id="@+id/autotext_customer_name"
@@ -142,14 +142,14 @@
         android:id="@+id/spinner_order_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:padding="4dp"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/dp_order_date"
-        app:layout_constraintTop_toBottomOf="@+id/text_profit" />
+        app:layout_constraintEnd_toStartOf="@+id/text_order_date_label"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/text_quantity" />
 
     <TextView
         android:id="@+id/textView15"
@@ -157,9 +157,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Order Status"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_order_status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_profit" />
 

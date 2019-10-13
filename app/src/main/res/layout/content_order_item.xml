@@ -21,12 +21,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:freezesText="false"
                 android:text="TextView"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/text_product_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/check_selection"
                 app:layout_constraintTop_toBottomOf="@+id/text_order_date" />
 
@@ -34,30 +35,32 @@
                 android:id="@+id/text_product_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="TextView"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/text_quantity"
-                app:layout_constraintStart_toEndOf="@+id/text_cashpayable"
-                app:layout_constraintTop_toBottomOf="@+id/text_order_date" />
+                app:layout_constraintEnd_toStartOf="@+id/textView23"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/check_selection"
+                app:layout_constraintTop_toBottomOf="@+id/text_customer_name" />
 
             <TextView
                 android:id="@+id/text_quantity"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/text_product_name"
-                app:layout_constraintTop_toBottomOf="@+id/text_order_date" />
+                app:layout_constraintEnd_toEndOf="@+id/textView23"
+                app:layout_constraintHorizontal_bias="0.275"
+                app:layout_constraintStart_toStartOf="@+id/textView23"
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
             <TextView
                 android:id="@+id/text_profit"
@@ -67,7 +70,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/text_cashpayable"
                 app:layout_constraintTop_toBottomOf="@+id/text_cashpayable" />
@@ -112,54 +115,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="Cash Payable:"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toEndOf="@+id/check_selection"
-                app:layout_constraintTop_toBottomOf="@+id/text_contact_no" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
                 android:id="@+id/text_cashpayable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toBottomOf="@+id/text_contact_no" />
-
-            <TextView
-                android:id="@+id/text_contact_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:text="TextView"
-                android:textColor="@color/colorPrimary"
-                app:layout_constraintStart_toEndOf="@+id/check_selection"
-                app:layout_constraintTop_toBottomOf="@+id/text_customer_name" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="32dp"
                 android:text="Status:"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/text_order_status"
                 app:layout_constraintStart_toEndOf="@+id/text_product_name"
-                app:layout_constraintTop_toBottomOf="@+id/text_contact_no" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
                 android:id="@+id/text_order_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="32dp"
                 android:text="TextView"
@@ -167,8 +156,55 @@
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView16"
-                app:layout_constraintTop_toBottomOf="@+id/text_contact_no" />
+                app:layout_constraintStart_toEndOf="@+id/textView16" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="#C9BDB7B7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_selection"
+                app:layout_constraintTop_toBottomOf="@+id/text_customer_name" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:text="Quantity"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_product_name"
+                app:layout_constraintTop_toBottomOf="@+id/text_customer_name" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="#C9BDB7B7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.235"
+                app:layout_constraintStart_toEndOf="@+id/check_selection"
+                app:layout_constraintTop_toBottomOf="@+id/text_quantity" />
+
+            <ImageButton
+                android:id="@+id/imagebutton_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:background="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

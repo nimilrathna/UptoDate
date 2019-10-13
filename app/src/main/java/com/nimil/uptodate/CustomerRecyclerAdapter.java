@@ -46,7 +46,7 @@ public class CustomerRecyclerAdapter extends RecyclerView.Adapter<CustomerRecycl
     public ArrayList<Integer> getSelectedIds(){
         return mSelectedIds;
     }
-
+    public Cursor getCursor(){return mCursor;}
     private void populateColumnPosition() {
         if(mCursor==null)
             return;
@@ -76,11 +76,17 @@ public class CustomerRecyclerAdapter extends RecyclerView.Adapter<CustomerRecycl
     public void onBindViewHolder(@NonNull CustomerRecyclerAdapter.ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.mId=mCursor.getInt(mCustomerIdPos);
-        holder.mTextCustomerName.setText(mCursor.getString(mCustomerNamePos));
+        String customerName=mCursor.getString(mCustomerNamePos);
+        int titleLength=mContext.getResources().getInteger(R.integer.customer_name_length)+5;
+        if(customerName.length()> titleLength)
+            customerName=customerName.substring(0,titleLength)+"..";
+        holder.mTextCustomerName.setText(customerName);
         holder.mEntryDate.setText(mCursor.getString(mEntryDatePos));
         holder.mTextMobileNo.setText(mCursor.getString(mMobileNoPos));
-        holder.mTextAlternativeNo.setText(mCursor.getString(mAlternativeNoPos));
-        holder.mTextEmailId.setText(mCursor.getString(mEmailIdPos));
+        String alternativeNo=mCursor.getString(mAlternativeNoPos);
+        holder.mTextAlternativeNo.setText(alternativeNo.equals("")?"N/A":alternativeNo);
+        String emailId=mCursor.getString(mEmailIdPos);
+        holder.mTextEmailId.setText(emailId.equals("")?"N/A":emailId);
         if(mIsSelectionMode)
             holder.mCheck_Selection.setVisibility(View.VISIBLE);
         else
