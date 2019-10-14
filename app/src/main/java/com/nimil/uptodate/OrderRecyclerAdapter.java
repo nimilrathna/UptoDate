@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +33,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     private int mOderDatePos;
     private int mQuantityPos;
     private int mCashPayedPos;
-    private int mDeliveredPos;
-    private int mPaymentDonePos;
     private int mSellingPricePos;
-    private int mCustomerContactNoPos;
     private boolean mIsSelectionMode;
     private ArrayList<Integer> mSelectedIds;
     private int mOrderStatusPos;
@@ -67,7 +63,6 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             return;
         mOrderIdPos=mCursor.getColumnIndex(Orders._ID);
         mCustomerNamePos=mCursor.getColumnIndex(Orders.COLUMN_ORDER_CUSTOMER_NAME);
-        mCustomerContactNoPos=mCursor.getColumnIndex(Orders.COLUMN_CONTACT_NUMBER);
         mProductTitlePos=mCursor.getColumnIndex(Orders.COLUMN_ORDER_PRODUCT_NAME);
         mOderDatePos=mCursor.getColumnIndex(Orders.COLUMN_ORDER_DATE);
         mQuantityPos=mCursor.getColumnIndex(Orders.COLUMN_ORDER_QUANTITY);
@@ -79,8 +74,6 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         mOrderStatusPos = mCursor.getColumnIndex(Orders.COLUMN_ORDER_STATUS);
     }
     public void changeCursor(Cursor cursor){
-        //if(mCursor!=null)
-        //  mCursor.close();
         mCursor=cursor;
         populateColumnPosition();
         notifyDataSetChanged();
@@ -110,12 +103,6 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         holder.mText_ProductTitle.setText(productTitle);
         holder.mText_OrderDate.setText(mCursor.getString(mOderDatePos));
         holder.mText_Quantity.setText(mCursor.getString(mQuantityPos));
-        String cashpaid=mCursor.getString(mCashPayedPos);
-
-        /*if(cashpaid.equals(""))
-            holder.mText_CashPayed.setText("N/A");
-        else
-            holder.mText_CashPayed.setText(mCurrency+ cashpaid);*/
 
         DecimalFormat formatDecimal = new DecimalFormat("#.##");
         formatDecimal.setRoundingMode(RoundingMode.UP);
@@ -138,18 +125,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             double profit=cashPayable-(orderQuantity*dActualPrice);
             holder.mText_profit.setText(mCurrency+formatDecimal.format(profit));
         }
-       /* if (mCursor.getString(mDeliveredPos).equals("Y")) {
-            holder.mCheck_Delivered.setChecked(true);
-        }
-        else {
-            holder.mCheck_Delivered.setChecked(false);
-        }
-        if (mCursor.getString(mPaymentDonePos).equals("Y")){
-            holder.mCheck_Payment_done.setChecked(true);
-        }
-        else {
-            holder.mCheck_Payment_done.setChecked(false);
-        }*/
+
        String status=mCursor.getString(mOrderStatusPos);
        holder.mText_Status.setText(status);
        if(status.equals(mContext.getString(R.string.paid)) || status.equals(mContext.getString(R.string.delivered))){
@@ -169,7 +145,6 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     private void updateCurrency() {
         SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(mContext);
         String countryCode = pref.getString("currency","INR");
-        //Locale locale=new Locale(mCurrency);
         mCurrency=Currency.getInstance(countryCode).getSymbol();
 
     }
@@ -181,15 +156,11 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public final TextView mText_CustomerName;
-        //public final TextView mText_ContactNo;
         public final TextView mText_ProductTitle;
         public final TextView mText_OrderDate;
         public final TextView mText_Quantity;
         public final TextView mText_cash_payable;
         public final ImageButton mButtonEdit;
-        //public final TextView mText_CashPayed;
-        //public final CheckBox mCheck_Delivered;
-        //public final CheckBox mCheck_Payment_done;
         public final TextView mText_Status;
         public final CheckBox mCheck_Selection;
         private boolean isAddedToSelectionList;
@@ -200,15 +171,11 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             super(itemView);
             mButtonEdit=itemView.findViewById(R.id.imagebutton_edit);
             mText_CustomerName=itemView.findViewById(R.id.text_customer_name);
-            //mText_ContactNo=itemView.findViewById(R.id.text_contact_no);
             mText_ProductTitle=itemView.findViewById(R.id.text_product_name);
             mText_OrderDate=itemView.findViewById(R.id.text_order_date);
             mText_Quantity=itemView.findViewById(R.id.text_quantity);
             mText_cash_payable=itemView.findViewById(R.id.text_cashpayable);
             mText_profit = itemView.findViewById(R.id.text_profit);
-            //mText_CashPayed=itemView.findViewById(R.id.text_profit);
-            //mCheck_Delivered=itemView.findViewById(R.id.check_delivered);
-            //mCheck_Payment_done=itemView.findViewById(R.id.check_payment_done);
             mText_Status=itemView.findViewById(R.id.text_order_status);
             mCheck_Selection=itemView.findViewById(R.id.check_selection);
             mCheck_Selection.setChecked(false);

@@ -7,10 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import android.text.Html;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -74,9 +71,6 @@ public class MainActivity extends AppCompatActivity
     private boolean  mIsDeleteConfirmed;
     private ArrayList<Integer> mDeletionListIds;
 
-    private boolean mIsMenuItemCheckDeliverd;
-    private boolean mIsMenuItemCheckPayed;
-    private boolean mIsMenuItemAll=true;
     private MenuItem mActionDelivered;
     private MenuItem mActionPayed;
     private MenuItem mMenuItemViewOrders;
@@ -116,14 +110,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView=(NavigationView)findViewById(R.id.nav_view);
         View headerView=navigationView.getHeaderView(0);
         TextView text_user_name=(TextView)headerView.findViewById(R.id.text_name);
-        //TextView text_user_email=(TextView)headerView.findViewById(R.id.text_user_email);
-
         SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
         String user_name=pref.getString("signature","");
-        //String user_email=pref.getString("email","");
-
         text_user_name.setText(user_name);
-        //text_user_email.setText(user_email);
     }
 
     private void startActivityByDisplayContent() {
@@ -205,9 +194,7 @@ public class MainActivity extends AppCompatActivity
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
         if (view == null) {
             view = new View(activity);
         }
@@ -353,7 +340,6 @@ public class MainActivity extends AppCompatActivity
             queryBySearchKey(null,null,Products.COLUMN_PURCHASE_DATE);
         }
         else if(id==R.id.action_sort_entrydate){
-            //if(mDisplayContent==ORDERS)
                 queryBySearchKey(null,null,Orders.COLUMN_ENTRY_DATE);
         }
         else if(id==R.id.action_sort_customername){
@@ -363,9 +349,6 @@ public class MainActivity extends AppCompatActivity
             queryBySearchKey(null,null,Products.COLUMN_PRODUCT_NAME);
         }
         else if(id==R.id.action_all){
-            mIsMenuItemAll=true;
-            //mIsMenuItemCheckDeliverd=false;
-            //mIsMenuItemCheckPayed=false;
             mActionDelivered.setChecked(false);
             mActionPayed.setChecked(false);
             queryBySearchKey(null,null,null);
@@ -376,13 +359,11 @@ public class MainActivity extends AppCompatActivity
             String selectionArgs;
             if(!item.isChecked()) {
                 item.setChecked(true);
-                //mIsMenuItemCheckDeliverd=true;
                 selectionArgs = getString(R.string.delivered);
                 queryBySearchKey(selection,selectionArgs,null);
             }
             else{
                 item.setChecked(false);
-                //mIsMenuItemCheckDeliverd=false;
                 selectionArgs =getString(R.string.not_delivered);
                 queryBySearchKey(selection,selectionArgs,null);
             }
@@ -393,13 +374,11 @@ public class MainActivity extends AppCompatActivity
            String selectionArgs;
             if(!item.isChecked()) {
                 item.setChecked(true);
-                //mIsMenuItemCheckPayed=true;
                 selectionArgs = getString(R.string.paid);
                 queryBySearchKey(selection,selectionArgs,null);
             }
             else{
                 item.setChecked(false);
-                //mIsMenuItemCheckPayed=false;
                 selectionArgs = getString(R.string.not_paid);
                 queryBySearchKey(selection,selectionArgs,null);
 
@@ -427,16 +406,13 @@ public class MainActivity extends AppCompatActivity
         switch(mDisplayContent) {
             case CUSTOMERS:
                 mDeletionListIds = mCustomerRecyclerAdapter.getSelectedIds();
-                //mCustomerRecyclerAdapter.notifyDataSetChanged();
                 break;
             case PRODUCTS:
                 mDeletionListIds = mProductRecyclerAdapter.getSelectedIds();
-                //mProductRecyclerAdapter.notifyDataSetChanged();
                 break;
             case ORDERS:
             default:
                 mDeletionListIds = mOrderRecyclerAdapter.getSelectedIds();
-                //mOrderRecyclerAdapter.notifyDataSetChanged();
                 break;
         }
         if(mDeletionListIds !=null && mDeletionListIds.size()>0) {
@@ -477,17 +453,6 @@ public class MainActivity extends AppCompatActivity
                         break;
 
                 }
-                int deletedRowsCount=0;
-                for (Integer id : mDeletionListIds) {
-                    String selectionArgs[]={Integer.toString(id)};
-                    int noRowsDeleted=getContentResolver().delete(tableName, selection, selectionArgs);
-                    deletedRowsCount+=noRowsDeleted;
-                }
-               /* if(deletedRowsCount<mDeletionListIds.size()) {
-                    CustomMessageBox customMessageBox=new CustomMessageBox(parent+" refered by Orders are not deleted.");
-                    customMessageBox.show(getSupportFragmentManager(),"Message");
-                }*/
-
                 return null;
             }
             @Override
@@ -503,7 +468,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_orders) {

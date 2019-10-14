@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,8 +64,6 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
         mSellingPricePos=mCursor.getColumnIndex(Products.COLUMN_SELLING_PRICE);
     }
     public void changeCursor(Cursor cursor){
-        //if(mCursor!=null)
-        //  mCursor.close();
         mCursor=cursor;
         populateColumnPosition();
         notifyDataSetChanged();
@@ -79,7 +78,6 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
     private void updateCurrency() {
         SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(mContext);
         String countryCode = pref.getString("currency","INR");
-        //Locale locale=new Locale(mCurrency);
         mCurrency= Currency.getInstance(countryCode).getSymbol();
 
     }
@@ -128,8 +126,11 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
         public final CheckBox mCheck_Selection;
         private boolean isAddedToSelectionList;
         public int mId;
+        private final ImageButton mButton_add_order;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mButton_add_order = itemView.findViewById(R.id.buttonimage_add_order);
             mText_product_title=itemView.findViewById(R.id.text_product_title);
             mText_purchase_date=itemView.findViewById(R.id.text_purchase_date);
             mText_quantity=itemView.findViewById(R.id.text_quantity);
@@ -176,6 +177,16 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
                             isAddedToSelectionList=false;
                         }
                     }
+                }
+            });
+            mButton_add_order.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(mContext,OrderActivity.class);
+                    intent.putExtra(OrderActivity.PRODUCT_ID,String.valueOf(mId));
+                    intent.putExtra(OrderActivity.PRODUCT_NAME,mText_product_title.getText().toString());
+                    intent.putExtra(OrderActivity.PRODUCT_QUANTITY,Integer.parseInt(mText_quantity.getText().toString()));
+                    mContext.startActivity(intent);
                 }
             });
         }

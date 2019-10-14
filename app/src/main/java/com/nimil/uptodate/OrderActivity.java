@@ -48,6 +48,9 @@ import java.util.Date;
 public class OrderActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, CustomDeleteDialog.DeleteDialogListener {
     public static final String ORDER_ID = "com.nimil.uptodate.ORDER_ID";
+    public static final String PRODUCT_ID = "com.nimil.uptodate.PRODUCT_ID";
+    public static final String PRODUCT_NAME = "com.nimil.uptodate.PRODUCT_NAME";
+    public static final String PRODUCT_QUANTITY = "com.nimil.uptodate.PRODUCT_QUANTITY";
     private static final int LOADER_ORDER = 0;
     private static final int LOADER_CUSTUMER_NAMES = 1;
     private static final int LOADER_PRODUCT_NAMES = 2;
@@ -56,13 +59,7 @@ public class OrderActivity extends AppCompatActivity
     private DatePicker mDpOrderDate;
     private TextView mTextQuantity;
     private TextView mTextCashPayed;
-    //private CheckBox mCheckPaymentCompleted;
-    //private CheckBox mCheckDelivered;
-
     private Cursor mOrderCursor;
-
-    private Cursor mCustomerNamesCursor;
-    private Cursor mProductNameCursor;
     private Uri mOrderUri;
     private int mCustomerIdPos;
     private int mProductIdPos;
@@ -71,14 +68,8 @@ public class OrderActivity extends AppCompatActivity
     private int mOrderDatePos;
     private int mQunatityPos;
     private int mCashPayedPos;
-    private int mPaymentCompletedPos;
-    private int mDeliveredPos;
     private int mOrderId;
 
-    private SimpleCursorAdapter mAdapterCustomerNames;
-    private SimpleCursorAdapter mAdapterProductNames;
-    private boolean mCustomerNamesloadFinished = false;
-    private boolean mProductNamesloadFinished = false;
     private boolean mOrderloadFinished = false;
     private boolean mIsDeleteConfirmed;
     private static final int ID_NEW = -1;
@@ -103,6 +94,7 @@ public class OrderActivity extends AppCompatActivity
     private String mCurrency;
     private String mPreviousProductId;
     private int mPreviousProductTotalQuantity;
+    private String mProduct_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +106,6 @@ public class OrderActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        //getSupportLoaderManager().restartLoader(LOADER_CUSTUMER_NAMES,null,this).forceLoad();
-        //getSupportLoaderManager().restartLoader(LOADER_PRODUCT_NAMES,null,this).forceLoad();
-//        mSpinnerProductName.setSelection(-1);
-        //      mSpinnerCustomerName.setSelection(-1);
         super.onResume();
 
     }
@@ -131,6 +119,12 @@ public class OrderActivity extends AppCompatActivity
         Intent intent = getIntent();
         mOrderId = intent.getIntExtra(ORDER_ID, DEFAULT_VALUE);
         mIsNewOrder = (mOrderId == DEFAULT_VALUE);
+        if(mIsNewOrder) {
+            mProductId = intent.getStringExtra(PRODUCT_ID);
+            mProduct_name = intent.getStringExtra(PRODUCT_NAME);
+            mProductTotalQuantity=intent.getIntExtra(PRODUCT_QUANTITY,DEFAULT_VALUE);
+        }
+
     }
 
     private void updateCurrency() {
@@ -141,35 +135,18 @@ public class OrderActivity extends AppCompatActivity
     }
 
     private void intialActions() {
-       /* mSpinnerCustomerName=findViewById(R.id.spinner_customer_name);
-        mSpinnerProductName=findViewById(R.id.spinner_product_name);*/
         updateCurrency();
         mDpOrderDate = findViewById(R.id.dp_order_date);
         mTextQuantity = findViewById(R.id.text_quantity);
         mTextCashPayed = findViewById(R.id.text_profit);
         TextView textCashPayedLabel = findViewById(R.id.text_cash_payed_label);
         textCashPayedLabel.setText("Cash Payed in " + mCurrency);
-        //mCheckPaymentCompleted=findViewById(R.id.check_payment_completed);
-        //mCheckDelivered=findViewById(R.id.layout_constrain_order);
         mSpinnerOrderStatus = findViewById(R.id.spinner_order_status);
 
         mStatusArrayAdapter = ArrayAdapter.createFromResource(this,
                 R.array.order_status, android.R.layout.simple_spinner_item);
         mStatusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerOrderStatus.setAdapter(mStatusArrayAdapter);
-      /*  mAdapterCustomerNames = new SimpleCursorAdapter(this,R.layout.content_spinner_item,null,
-                new String[] {Customers.COLUMN_CUSTOMER_NAME},
-                new int[] {R.id.text_item},0);
-        mAdapterCustomerNames.setDropDownViewResource(R.layout.content_spinner_item);
-        mSpinnerCustomerName.setAdapter(mAdapterCustomerNames);
-
-        mAdapterProductNames = new SimpleCursorAdapter(this,R.layout.content_spinner_item,null,
-                new String[] {Products.COLUMN_PRODUCT_NAME},
-                new int[] {R.id.text_item},0);
-        mAdapterProductNames.setDropDownViewResource(R.layout.content_spinner_item);
-        mSpinnerProductName.setAdapter(mAdapterProductNames);
-        mSpinnerProductName.setSelection(-1);*/
-
         mAutoTextCustomerName = findViewById(R.id.autotext_customer_name);
         mAutoTextProductName = findViewById(R.id.autotext_product_name);
 
@@ -194,12 +171,6 @@ public class OrderActivity extends AppCompatActivity
             }
         });
 
-        /*setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                mCustomerId=mCustomerNameAutoTextCursorAdapter.getId();
-            }
-        });*/
         mProductNameAutoTextCursorAdapter = new AutoCompletionTextCursorAdapter(this, null, AutoCompletionTextCursorAdapter.PRODUCT_NAMES);
         mAutoTextProductName.setAdapter(mProductNameAutoTextCursorAdapter);
         mAutoTextProductName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -297,8 +268,14 @@ public class OrderActivity extends AppCompatActivity
 
             }
         });
-        if (!mIsNewOrder)
+
+
+        if (!mIsNewOrder) {
             getSupportLoaderManager().restartLoader(LOADER_ORDER, null, this).forceLoad();
+        }
+        else if(!mProductId.equals("")){
+            mAutoTextProductName.setText(mProduct_name);
+        }
 
     }
 
@@ -389,7 +366,6 @@ public class OrderActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.edit_order_menu, menu);
-
         return true;
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -469,18 +445,6 @@ public class OrderActivity extends AppCompatActivity
         int quantity=txtQuantity.equals("")?0:Integer.parseInt(txtQuantity);
         cv.put(Orders.COLUMN_ORDER_QUANTITY,quantity);
         cv.put(Orders.COLUMN_ORDER_STATUS,mSpinnerOrderStatus.getSelectedItem().toString());
-        String paymentCompleted="";
-        /*(if(mCheckPaymentCompleted.isChecked())
-            paymentCompleted="Y";
-        else
-            paymentCompleted="N";
-        cv.put(Orders.COLUMN_PAYMENT_COMPLETED,paymentCompleted);
-        String isDelivered;
-        if(mCheckDelivered.isChecked())
-            isDelivered="Y";
-        else
-            isDelivered="N";
-        cv.put(Orders.COLUMN_PRODUCT_DELIVERED,isDelivered);*/
         task.execute(cv);
     }
 
@@ -497,7 +461,6 @@ public class OrderActivity extends AppCompatActivity
             protected void onPostExecute(Uri uri) {
                 mOrderUri=uri;
                 finish();
-                //Snackbar.make(m,R.string.product_added,Snackbar.LENGTH_SHORT).show();
             }
         };
         ContentValues cv=new ContentValues();
@@ -516,19 +479,6 @@ public class OrderActivity extends AppCompatActivity
         int quantity=txtQuantity.equals("")?0:Integer.parseInt(txtQuantity);
         cv.put(Orders.COLUMN_ORDER_QUANTITY,quantity);
         cv.put(Orders.COLUMN_ORDER_STATUS,mSpinnerOrderStatus.getSelectedItem().toString());
-        /*String paymentCompleted="";
-        if(mCheckPaymentCompleted.isChecked())
-            paymentCompleted="Y";
-        else
-            paymentCompleted="N";
-        cv.put(Orders.COLUMN_PAYMENT_COMPLETED,paymentCompleted);
-
-        String isDelivered;
-        if(mCheckDelivered.isChecked())
-            isDelivered="Y";
-        else
-            isDelivered="N";
-        cv.put(Orders.COLUMN_PRODUCT_DELIVERED,isDelivered);*/
         task.execute(cv);
     }
     public static java.util.Date getDateFromDatePicker(DatePicker datePicker){
@@ -601,46 +551,6 @@ public class OrderActivity extends AppCompatActivity
             displayOrderDetails();
 
         }
-        /*else if(loader.getId()==LOADER_CUSTUMER_NAMES){
-            mCustomerNamesloadFinished = true;
-            mCustomerNamesCursor=data;
-            MatrixCursor matrixCursor = new MatrixCursor(new String[] { Customers._ID, Customers.COLUMN_CUSTOMER_NAME });
-            matrixCursor.addRow(new Object[] { "-1","Create New Customer"  });
-            MergeCursor mergeCursor = new MergeCursor(new Cursor[] { mCustomerNamesCursor,matrixCursor });
-            mAdapterCustomerNames.changeCursor(mergeCursor);
-            if(mOrderloadFinished&&mProductNamesloadFinished){
-                displayOrderDetails();
-                mCustomerNamesloadFinished=false;
-            }
-        }
-        else if(loader.getId()==LOADER_PRODUCT_NAMES){
-            mProductNamesloadFinished = true;
-            mProductNameCursor=data;
-            MatrixCursor matrixCursor = new MatrixCursor(new String[] { Products._ID, Products.COLUMN_PRODUCT_NAME});
-            matrixCursor.addRow(new Object[] { "-1","Create New Product"  });
-            MergeCursor mergeCursor = new MergeCursor(new Cursor[] {mProductNameCursor, matrixCursor });
-            mAdapterProductNames.changeCursor(mergeCursor);
-            if(mOrderloadFinished && mCustomerNamesloadFinished){
-                displayOrderDetails();
-                mProductNamesloadFinished=false;
-            }
-        }*/
-    }
-    private int getCustomerIdPosition(String customerId){
-        while(mCustomerNamesCursor.moveToNext()){
-            if(mCustomerNamesCursor.getString(mCustomerNamesCursor.getColumnIndex(Customers._ID)).equals(customerId)){
-                return mCustomerNamesCursor.getPosition();
-            }
-        }
-        return -1;
-    }
-    private int getProductIdPosition(String productId){
-        while(mProductNameCursor.moveToNext()){
-            if(mProductNameCursor.getString(mProductNameCursor.getColumnIndex(Products._ID)).equals(productId)){
-                return mProductNameCursor.getPosition();
-            }
-        }
-        return -1;
     }
     private void displayOrderDetails() {
         mCustomerNameAutoTextCursorAdapter.setIdSearchConstarint(mOrderCursor.getString(mCustomerIdPos));
@@ -677,17 +587,6 @@ public class OrderActivity extends AppCompatActivity
             mDpOrderDate.init(pYear,pMonth,pDay,null);
         mTextQuantity.setText(mOrderCursor.getString(mQunatityPos));
         mTextCashPayed.setText(mOrderCursor.getString(mCashPayedPos));
-        String paymentCompleted=mOrderCursor.getString(mPaymentCompletedPos);
-       /* if(paymentCompleted.equals("Y")){
-            mCheckPaymentCompleted.setChecked(true);
-        }
-        else
-            mCheckPaymentCompleted.setChecked(false);
-        String delivered=mOrderCursor.getString(mDeliveredPos);
-        if(delivered.equals("Y"))
-            mCheckDelivered.setChecked(true);
-        else
-            mCheckDelivered.setChecked(false);*/
        int pos=mStatusArrayAdapter.getPosition(mOrderCursor.getString(mOrderStatusPos));
        mSpinnerOrderStatus.setSelection(pos);
     }

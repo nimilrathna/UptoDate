@@ -141,8 +141,6 @@ implements CustomDeleteDialog.DeleteDialogListener {
                     "&body=" + Uri.encode(Html.fromHtml(msg).toString());
 
             intent.setData(Uri.parse(mailto));
-            /*intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-            intent.putExtra(Intent.EXTRA_TEXT,Html.fromHtml(msg));*/
             startActivity(intent);
         }
         catch(Exception e){
@@ -170,11 +168,7 @@ implements CustomDeleteDialog.DeleteDialogListener {
             SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
             String organisation_name=pref.getString("signature","");
             String sendMessage="<h2>"+organisation_name+"</h2>" +msg;
-
             String toNumber = mTextCustomerMobile.getText().toString();
-            //if(toNumber.charAt(0)=='+'||toNumber.charAt(0)=='0')
-              //  toNumber=toNumber.substring(1,toNumber.length()-1);// Replace with mobile phone number without +Sign or leading zeros, but with country code
-            //Suppose your country is India and your phone number is “xxxxxxxxxx”, then you need to send “91xxxxxxxxxx”.
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+toNumber +"&text="+Html.fromHtml(sendMessage)));
             startActivity(intent);

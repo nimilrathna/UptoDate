@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.nimil.uptodate.UptoDateProviderContract.Orders;
 import com.nimil.uptodate.UptoDateProviderContract.Products;
 
@@ -54,6 +53,10 @@ public class ProductActivity extends AppCompatActivity
     private int mQuantityPos;
     private boolean mIsDeleteConfirmed;
     private String mPreviousProductName;
+    private MenuItem mMenuItemAddOrder;
+    private MenuItem mMenuItemDelete;
+    private MenuItem mMenuItemEdit;
+    private MenuItem mMenuItemCancel;
 
 private int mProduct_id;
     private String mCurrency;
@@ -150,7 +153,6 @@ private int mProduct_id;
                 String selection = Orders.COLUMN_PRODUCT_ID + " = ?";
                 String[] selectionArgs = {Integer.toString(mProduct_id)};
                 getContentResolver().update(Orders.CONTENT_URI,rowValues,selection,selectionArgs);
-                //return noteUri;
                 return null;
             }
 
@@ -181,6 +183,14 @@ private int mProduct_id;
         // Inflate the menu; this adds items to the action bar if it is present.
         if(mProduct_id!=DEFAULT_VALUE) {
             getMenuInflater().inflate(R.menu.comman_menu, menu);
+            mMenuItemAddOrder = menu.findItem(R.id.action_add_order);
+            mMenuItemAddOrder.setVisible(true);
+            mMenuItemDelete = menu.findItem(R.id.action_common_delete);
+            mMenuItemDelete.setVisible(true);
+            mMenuItemEdit = menu.findItem(R.id.action_common_edit);
+            mMenuItemEdit.setVisible(true);
+            mMenuItemCancel = menu.findItem(R.id.action_edit_cancel);
+            mMenuItemCancel.setVisible(false);
         }
         return true;
     }
@@ -188,16 +198,31 @@ private int mProduct_id;
 
         int id = item.getItemId();
 
-        if (id == R.id.action_order_edit) {
+        if (id == R.id.action_common_edit) {
+            mMenuItemEdit.setVisible(false);
+            mMenuItemDelete.setVisible(false);
+            mMenuItemAddOrder.setVisible(false);
+            mMenuItemCancel.setVisible(true);
             ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout_product);
             for (int i = 0; i < layout.getChildCount(); i++) {
                 View child = layout.getChildAt(i);
                 child.setEnabled(true);
             }
         }
-        else if (id == R.id.action_order_delete) {
+        else if (id == R.id.action_common_delete) {
             showDeleteDialog();
-
+        }
+        else if(id==R.id.action_edit_cancel){
+            mMenuItemEdit.setVisible(true);
+            mMenuItemDelete.setVisible(true);
+            mMenuItemAddOrder.setVisible(true);
+            mMenuItemCancel.setVisible(false);
+            ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout_product);
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View child = layout.getChildAt(i);
+                child.setEnabled(false
+                );
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -243,7 +268,6 @@ private int mProduct_id;
                 String selection = Products._ID + " = ?";
                 String[] selectionArgs = {Integer.toString(mProduct_id)};
                 getContentResolver().update(Products.CONTENT_URI,rowValues,selection,selectionArgs);
-                //return noteUri;
                 return null;
             }
 
@@ -256,7 +280,7 @@ private int mProduct_id;
         ContentValues cv=new ContentValues();
         cv.put(Products.COLUMN_PRODUCT_NAME,mTextProductTitle.getText().toString());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String purchaseDate=sdf.format(getDateFromDatePicker(mDpPurchaseDate));
         cv.put(Products.COLUMN_PURCHASE_DATE,purchaseDate);
 
@@ -301,7 +325,7 @@ private int mProduct_id;
         ContentValues cv=new ContentValues();
         cv.put(Products.COLUMN_PRODUCT_NAME,mTextProductTitle.getText().toString());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String entryDate = sdf.format(new Date());
         String purchaseDate=sdf.format(getDateFromDatePicker(mDpPurchaseDate));
 
@@ -362,7 +386,6 @@ private int mProduct_id;
     private void displayProductDetails() {
         mPreviousProductName=mProductCursor.getString(mProductTitlePos);
         mTextProductTitle.setText(mProductCursor.getString(mProductTitlePos));
-        //mDpPurchaseDate.set
         String purchaseDate=mProductCursor.getString(mPurchaseDatePos);
         int pDay=0,pMonth=0,pYear=0;
         Date date_purchase;

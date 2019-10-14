@@ -49,6 +49,10 @@ implements LoaderManager.LoaderCallbacks<Cursor>, CustomDeleteDialog.DeleteDialo
     private String mPreviousCustomerName;
     private int mAddressPos;
     private TextView mTextAddress;
+    private MenuItem mMenuItemAddOrder;
+    private MenuItem mMenuItemDelete;
+    private MenuItem mMenuItemEdit;
+    private MenuItem mMenuItemCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,23 +147,44 @@ implements LoaderManager.LoaderCallbacks<Cursor>, CustomDeleteDialog.DeleteDialo
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if(mCustomerId!=DEFAULT_VALUE){
-        getMenuInflater().inflate(R.menu.comman_menu, menu);
+            getMenuInflater().inflate(R.menu.comman_menu, menu);
+            mMenuItemAddOrder = menu.findItem(R.id.action_add_order);
+            mMenuItemAddOrder.setVisible(false);
+            mMenuItemDelete = menu.findItem(R.id.action_common_delete);
+            mMenuItemDelete.setVisible(true);
+            mMenuItemEdit = menu.findItem(R.id.action_common_edit);
+            mMenuItemEdit.setVisible(true);
+            mMenuItemCancel = menu.findItem(R.id.action_edit_cancel);
+            mMenuItemCancel.setVisible(false);
         }
         return true;
     }
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.action_order_edit) {
+        if (id == R.id.action_common_edit) {
+            mMenuItemEdit.setVisible(false);
+            mMenuItemDelete.setVisible(false);
+            mMenuItemCancel.setVisible(true);
             ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout_customer);
             for (int i = 0; i < layout.getChildCount(); i++) {
                 View child = layout.getChildAt(i);
                 child.setEnabled(true);
             }
         }
-        else if (id == R.id.action_order_delete) {
+        else if (id == R.id.action_common_delete) {
             showDeleteDialog();
 
+        }
+        else if(id==R.id.action_edit_cancel){
+            ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout_customer);
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View child = layout.getChildAt(i);
+                child.setEnabled(false);
+            }
+            mMenuItemEdit.setVisible(true);
+            mMenuItemDelete.setVisible(true);
+            mMenuItemCancel.setVisible(false);
         }
         return super.onOptionsItemSelected(item);
     }

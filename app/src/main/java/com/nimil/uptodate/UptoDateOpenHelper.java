@@ -28,9 +28,9 @@ public class UptoDateOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS products_info");
-        db.execSQL("DROP TABLE IF EXISTS customers_info");
-        db.execSQL("DROP TABLE IF EXISTS orders_info");
-        onCreate(db);
+        //db.execSQL("DROP TABLE IF EXISTS products_info");
+        //db.execSQL("DROP TABLE IF EXISTS customers_info");
+        //db.execSQL("DROP TABLE IF EXISTS orders_info");
+        //onCreate(db);
     }
 }
